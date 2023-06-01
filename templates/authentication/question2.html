@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Online Assessment</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+        button[type="submit"] {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #5407fa;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+        textarea {
+            display: block;
+            margin: 0 auto;
+            width: 80%;
+            height: 200px;
+            border: 2px solid #000;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #cae5ee;
+        }
+        
+        
+		form {
+			margin: 20px;
+		}
+		label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		input[type="submit"] {
+			margin-top: 10px;
+            float: right;
+		}
+        h1 {
+            text-align: center;
+        }
+        body {
+  font-family: Arial, sans-serif;
+  background-color: #d3b4b4;
+  padding: 20px;
+}
+#next-btn {
+        background-color: #047af8; /* Set the desired background color */
+        color: #fff; /* Set the desired text color */
+    }
+	</style>
+</head>
+<body>
+	<h1>Online Assessment</h1>
+	<form id="question-form">
+		<label for="question"><h3>Question 2:Enter the following text in the text area</h3></label>
+        <p>The sun slowly descended on the horizon, casting a warm golden glow over the tranquil meadow. Wildflowers swayed gently in the soft breeze, painting the landscape with vibrant hues. Birds chirped melodiously, their songs filling the air with a symphony of nature's harmony. </p>
+		<textarea id="question" placeholder="Write your answer here"></textarea>
+		<input type="submit" id="next-btn" value="Next">
+	</form>
+    <button type="submit"><a href="/signout">Signout</a></button>
+    <script>
+		    const questionForm = document.getElementById("question-form");
+		
+		    questionForm.addEventListener('submit', event => {
+			event.preventDefault(); // prevent form from submitting
+			const formData = new FormData(event.target); // get form data
+			const answer = formData.get('question'); // get the answer
+			//console.log(answer); // replace console.log with your own code to handle the answer
+			//window.location.href = "question2.html"; // redirect to the next question
+		});
+	</script>
+    <script>
+        let textBox = document.getElementById('question');
+        const btn = document.getElementById('next-btn');
+        const data = [];
+        
+        const Key = [];
+        const downTime = [];
+        const upTime = [];
+        let keyCount = 0; // variable to count number of keys pressed
+        let wordCount = 0; // variable to count number of words pressed
+        let backspaceCount = 0; // variable to count number of times backspace is pressed
+        
+        // const start = new Date().getTime();
+        
+        textBox.addEventListener('keydown', (event) => {
+            // const downtime = new Date().getTime() - start;
+            const downtime = Date.now();
+            downTime.push(downtime);
+        });
+        
+        textBox.addEventListener('keyup', (event) => {
+            // const uptime = new Date().getTime() - start;
+            const uptime = Date.now();
+            const key = event.key;
+            upTime.push(uptime);
+            Key.push(key);
+        
+            // count number of keys pressed
+            keyCount++;
+        
+            // count number of words pressed
+            if (event.key === ' ' && textBox.value.trim() !== '') {
+                wordCount++;
+            }
+            
+        
+            // count number of times backspace is pressed
+            if (event.key === 'Backspace') {
+                backspaceCount++;
+            }
+        });
+        wordCount++;
+        
+        btn.addEventListener('click', (e) => {
+            for (let i = 0; i < Key.length; i++) {
+                const asciiValue = Key[i].charCodeAt(0); 
+                data.push({
+                    key: asciiValue,
+                    downtime: downTime[i],
+                    uptime: upTime[i],
+                    dwellTime: upTime[i] - downTime[i],
+                    flightTime: Math.abs(downTime[i+1] - upTime[i]),
+                    inter_key_latency: Math.abs(downTime[i+1] - downTime[i]),
+                    // Target: 2
+        
+                });
+            }
+            let csv = 'key,dwell_time,flight_time,inter_key_latency\n';
+                    for (let i = 0; i < data.length; i++) {
+                        csv += `${data[i].key},${data[i].dwellTime},${data[i].flightTime},${data[i].inter_key_latency}\n`;
+                    }
+            
+                    // Create a Blob object from the CSV string
+                    const blob = new Blob([csv], {type: 'text/csv'});
+                    
+                    // Create a download link and trigger the download
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'data_test.csv';
+                    link.click();
+            
+                
+            
+            console.log('Number of keys pressed: ', keyCount);
+            console.log('Number of words pressed: ', wordCount);
+            console.log('Number of times backspace is pressed: ', backspaceCount);
+            localStorage.setItem("keyCount", keyCount);
+            localStorage.setItem("wordCount",wordCount);
+            localStorage.setItem("backspaceCount", backspaceCount);
+            localStorage.setItem("data", JSON.stringify(data));
+        });
+        </script>
+	
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Online Assessment</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+        button[type="submit"] {
+        display: block;
+        margin: 10px auto;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #5407fa;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        text-decoration: none;
+         text-align: center;
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #d3b4b4;
+  padding: 20px;
+}
+
+    button[type="submit"]:hover {
+    background-color: #0075f2;
+}
+        textarea {
+            display: block;
+            margin: 0 auto;
+            width: 80%;
+            height: 200px;
+            border: 2px solid #000;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #cae5ee;
+        }
+        
+        
+		form {
+			margin: 20px;
+		}
+		label {
+			display: block;
+			margin-bottom: 10px;
+		}
+		input[type="submit"] {
+			margin-top: 10px;
+            float: right;
+            color: rgb(6, 202, 246);
+		}
+
+        h1 {
+            text-align: center;
+        }
+        .login-message {
+		  text-align: center;
+		  color: rgb(245, 0, 0);
+		  margin-top: 10px;
+		}
+        #next-btn {
+        background-color: #0676ee; /* Set the desired background color */
+        color: #fff; /* Set the desired text color */
+    }
+	</style>
+</head>
+<body>
+	<h1>Online Assessment</h1>
+	<form id="question-form" action="/question1" method="post">
+		<label for="question"><h3>Question 1:Enter the following text in the text area</h3></label>
+        <p>Amidst the bustling city streets, a solitary musician played his melodic tunes, enchanting passersby with his soulful melodies. The notes danced through the air, carrying with them a sense of nostalgia and longing. People paused in their hurried steps, captivated by the ethereal music that seemed to transport them to distant lands and forgotten memories.  </p>
+		<textarea id="question" placeholder="Write your answer here"></textarea>
+		<input type="submit" id="next-btn" value="Next">
+	</form>
+    <script>
+		    const questionForm = document.getElementById("question-form");
+		
+		    questionForm.addEventListener('submit', event => {
+			event.preventDefault(); // prevent form from submitting
+			const formData = new FormData(event.target); // get form data
+			const answer = formData.get('question'); // get the answer
+			//console.log(answer); // replace console.log with your own code to handle the answer
+			window.location.href = "/question2"; // redirect to the next question
+		});
+	</script>
+    <script>
+        let textBox = document.getElementById('question');
+        const btn = document.getElementById('next-btn');
+        const data = [];
+        
+        const Key = [];
+        const downTime = [];
+        const upTime = [];
+        let keyCount = 0; // variable to count number of keys pressed
+        let wordCount = 0; // variable to count number of words pressed
+        let backspaceCount = 0; // variable to count number of times backspace is pressed
+        
+        // const start = new Date().getTime();
+        
+        textBox.addEventListener('keydown', (event) => {
+            // const downtime = new Date().getTime() - start.
+            const downtime = Date.now();
+            downTime.push(downtime);
+        });
+        
+        textBox.addEventListener('keyup', (event) => {
+            // const uptime = new Date().getTime() - start;
+            const uptime = Date.now();
+            const key = event.key;
+            upTime.push(uptime);
+            Key.push(key);
+        
+            // count number of keys pressed
+            keyCount++;
+        
+            // count number of words pressed count
+            if (event.key === ' ' && textBox.value.trim() !== '') {
+                wordCount++;
+            }
+            
+        
+            // count number of times backspace is pressed
+            if (event.key === 'Backspace') {
+                backspaceCount++;
+            }
+        });
+        wordCount++;
+        // Retrieve the user ID from Django
+        const user_id = {request,user,id };
+
+        btn.addEventListener('click', (e) => {
+            for (let i = 0; i < Key.length; i++) {
+                const asciiValue = Key[i].charCodeAt(0); 
+                data.push({
+                    key: asciiValue,
+                    downtime: downTime[i],
+                    uptime: upTime[i],
+                    dwellTime: upTime[i] - downTime[i],
+                    flightTime: Math.abs(downTime[i+1] - upTime[i]),
+                    inter_key_latency: Math.abs(downTime[i+1] - downTime[i]),
+                    user_identity: user_id
+        
+                });
+            }
+            let csv = 'key,dwell_time,flight_time,inter_key_latency,user_identity\n';
+                    for (let i = 0; i < data.length; i++) {
+                        csv += `${data[i].key},${data[i].dwellTime},${data[i].flightTime},${data[i].inter_key_latency},${data[i].user_identity}\n`;
+                    }
+            
+                    // Create a Blob object from the CSV string
+                    const blob = new Blob([csv], {type: 'text/csv'});
+                    
+                    // Create a download link and trigger the download
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'data_training.csv';
+                    link.click();
+            
+                
+            
+            console.log('Number of keys pressed: ', keyCount);
+            console.log('Number of words pressed: ', wordCount);
+            console.log('Number of times backspace is pressed: ', backspaceCount);
+            localStorage.setItem("keyCount", keyCount);
+            localStorage.setItem("wordCount",wordCount);
+            localStorage.setItem("backspaceCount", backspaceCount);
+            localStorage.setItem("data", JSON.stringify(data));
+        });
+        </script>
+	
+</body>
+</html>

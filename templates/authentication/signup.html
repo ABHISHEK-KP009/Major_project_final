@@ -1,0 +1,123 @@
+<!-- {% load static %} -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <!-- <link rel="stylesheet" type="text/css" href="{%static '/slide_navbar_style.css'%}">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet"> -->
+    <style>
+
+body{
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	font-family: 'Jost', sans-serif;
+	background: linear-gradient(to bottom, #271e75, #29217d, #18184d);
+}
+
+h3 {
+  color: #573b8a;
+  text-align: center;
+  margin-top: 30px;
+  font-size: 40px; /* Increase the font size to 24 pixels */
+}
+
+input {
+  background-color: rgb(248, 244, 247);
+}
+
+form {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: linear-gradient(to bottom, #0f0c29, #362e86, #3b3b6d);
+  padding: 50px;
+  border-radius: 50px;
+  box-shadow: 10 20px 50px rgba(234, 7, 7, 0.1);
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ff0040;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  border: 1px solid #0e0101;
+}
+input::placeholder {
+  color: rgba(7, 0, 0, 0.529);
+}
+
+button[type="submit"] {
+    width: 60%;
+	height: 40px;
+	margin: 10px auto;
+	justify-content: center;
+	display: block;
+	color: #fff;
+	background: #573b8a;
+	font-size: 1em;
+	font-weight: bold;
+	margin-top: 20px;
+	outline: none;
+	border: none;
+	border-radius: 5px;
+	transition: .2s ease-in;
+	cursor: pointer;
+}
+
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+</style>
+</head>
+<body>
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      <strong>Message:</strong> {{ message}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="close">
+      <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  {% endfor %}
+  
+    <form action="/signup" method="post">
+        {% csrf_token %}
+        <h3>Signup</h3>
+        <!-- <label for="">Username</label> -->
+        <input type="text" id="username" name="username" placeholder="Create a username" Required>
+        <br>
+        <!-- <label for="">First Name</label> -->
+        <input type="text" id="fname" name="fname" placeholder="Enter your first name" Required>
+        <br>
+        <!-- <label for="">Last Name</label> -->
+        <input type="text" id="lname" name="lname" placeholder="Enter your last name" Required>
+        <br>
+        <!-- <label for="">Email Address</label> -->
+        <input type="email" id="email" name="email" placeholder="Enter your email address" Required>
+        <br>
+        <!-- <label for="">Password</label> -->
+        <input type="password" id="pass1" name="pass1" placeholder="Create a password" Required>
+        <br>
+        <!-- <label for="">Confirm Password</label> -->
+        <input type="password" id="pass2" name="pass2" placeholder="Confirm password" Required>
+        <br>
+        <button type="submit">Sign up</button>
+
+    </form>
+</body>
+</html>

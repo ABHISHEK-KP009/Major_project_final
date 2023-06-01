@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signin</title>
+    <style>
+        /* styles.css */
+
+    body{
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	font-family: 'Jost', sans-serif;
+	background: linear-gradient(to bottom, #271e75, #29217d, #18184d);
+}
+
+p {
+  text-align: center;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+h3 {
+  color: #573b8a;
+  text-align: center;
+  margin-top: 30px;
+  font-size: 40px;
+}
+button[type="submit"] {
+    width: 60%;
+	height: 40px;
+	margin: 10px auto;
+	justify-content: center;
+	display: block;
+	color: #fff;
+	background: #573b8a;
+	font-size: 1em;
+	font-weight: bold;
+	margin-top: 20px;
+	outline: none;
+	border: none;
+	border-radius: 5px;
+	transition: .2s ease-in;
+	cursor: pointer;
+}
+form {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: linear-gradient(to bottom, #0f0c29, #362e86, #3b3b6d);
+  padding: 50px;
+  border-radius: 50px;
+  box-shadow: 10 20px 50px rgba(234, 7, 7, 0.1);
+}
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+input {
+  background-color: rgb(248, 244, 247);
+}
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  border: 1px solid #0e0101;
+}
+.custom-alert-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px;
+            background-color: #47d3dad6;
+            z-index: 9999;
+        }
+.custom-alert {
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f8f8f8;
+        color: #333;
+        font-size: 16px;
+    }
+
+    .custom-alert strong {
+        font-weight: bold;
+    }
+
+    .custom-alert button.close {
+        position: relative;
+        top: -2px;
+        right: -5px;
+        padding: 0;
+        background: none;
+        border: none;
+    }
+
+</style>
+</head>
+<body>
+<div class="custom-alert-container"></div>
+  {% for message in messages %}
+  <div class="custom-alert-container alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      <strong>Message:</strong> {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="close">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  {% endfor %}
+
+
+    <form action="/signin" method="post">
+        {% csrf_token %}
+        <h3>Sign In</h3>
+        <!-- <label for="">Username</label> -->
+        <input type="text" id="username" name="username" placeholder="Enter Your username" Required>
+        <br>
+        <!-- <label for="">Password</label> -->
+        <input type="password" id="pass1" name="pass1" placeholder="Enter your password" Required>
+        <br>
+        
+        <button type="submit">Sign In</button>
+
+    </form>
+</body>
+</html>
