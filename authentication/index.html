@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication</title>
+    <style>
+        /* styles.css */
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #d3b4b4;
+  padding: 20px;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.alert-success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.alert-dismissible {
+  padding-right: 40px;
+}
+
+.alert-dismissible .close {
+  position: relative;
+  top: -2px;
+  right: -21px;
+  color: inherit;
+}
+
+h3 {
+  color: #333;
+  text-align: center;
+  margin-top: 30px;
+}
+
+h4 {
+  color: #333;
+  text-align: center;
+  margin-top: 10px;
+}
+
+button[type="submit"] {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+a {
+  color: #0808f4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.login-message {
+		  text-align: center;
+		  color: rgb(245, 0, 0);
+		  margin-top: 10px;
+		}
+
+</style>
+</head>
+<body>
+
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message:</strong> {{ message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+
+    <h3> Welcome to Online Examination system </h3>
+
+    {% if user.is_authenticated %}
+    <h3>Hello {{ fname }}</h3>
+    <h4>You are successfully logged in.</h4>
+    <button type="submit"><a href="/signout">Signout</a></button>
+    {% else %}
+    <!-- <button type="submit"> <a href="/signup">Signup</a></button> -->
+    <p class="login-message">New User? <a href="/signup">Sign Up</a></p>
+    <p class="login-message">Already Registered ?<a href="/signin">Sign In</a></p>
+    <!-- <button type="submit"><a href="/signin">Signin</a></button> -->
+    {% endif %}
+</body>
+</html>
